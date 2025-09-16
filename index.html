@@ -39,26 +39,26 @@ h1 {
   text-shadow: 0 0 10px #fff, 0 0 20px #f0f, 0 0 30px #0ff;
 }
 
-#blessingsContainer {
+#messages {
+  margin-top: 20px;
   text-align: left;
   max-height: 350px;
   overflow-y: auto;
-  margin-top: 20px;
+  padding: 10px;
 }
 
-.blessing {
-  background: rgba(255,255,255,0.2);
-  padding: 12px;
-  margin: 12px 0;
-  border-radius: 12px;
-  border: 2px solid;
-  border-image-slice: 1;
-  border-image-source: linear-gradient(135deg,#ff6ec7,#00d4ff);
+.message-item {
+  margin-bottom: 15px;
+  padding: 10px 15px;
+  border-radius: 15px;
+  background: linear-gradient(135deg,#ff6ec7,#00d4ff);
   box-shadow: 0 0 10px rgba(255,255,255,0.2);
-  white-space: pre-wrap;
+  position: relative;
+  opacity: 1; /* 固定显示 */
+  transform: translateY(0) scale(1);
 }
 
-.blessing strong { color: #ffd700; }
+.message-item strong { color: #ffd700; }
 
 canvas {
   position: fixed;
@@ -67,6 +67,10 @@ canvas {
   pointer-events: none;
   z-index: 0;
 }
+
+/* 隐藏输入框和按钮 */
+#inputSection { display: none; }
+
 </style>
 </head>
 <body>
@@ -76,20 +80,62 @@ canvas {
 <div id="ecardContainer">
   <h1>Farewell Card</h1>
 
-  <div id="blessingsContainer">
-    <div class="blessing"><strong>Thomas Tan:</strong> All the best to you Sue Yee! Really appreciate your help and guidance when I first joined. Sad to see you go.... Keep in touch!!</div>
-    <div class="blessing"><strong>Ling Ling:</strong> Hi Sue Yee, Wish we could have known each other longer but nonetheless, I am happy for you and your new adventure ahead. I am sure your new company and colleagues will benefit from your warm personality and vast knowledge. All the best in whatever the road takes you! Best wishes,</div>
-    <div class="blessing"><strong>Edison Lim:</strong> You’ve been such an awesome teammate — thanks a lot for all your support and guidance. Wishing you lots of success in your new role!</div>
-    <div class="blessing"><strong>Stanley Chew:</strong> Thank you for all your guidance throughout these years ,and for being so kind to us. Its been a pleasure to work alongside you. All the best and take care !</div>
-    <div class="blessing"><strong>Sean Khoo:</strong> “It’s hard to say goodbye, but I’m really happy for you. Best wishes in your new role, and may this next step bring you both growth and happiness. Let’s stay in touch!”</div>
-    <div class="blessing"><strong>Ai Hui:</strong> Thanks a lot for all the support these past few years. Learned a ton working with you and really enjoyed being part of the team. Wishing all the best ahead! I’ll definitely miss working with you.</div>
-    <div class="blessing"><strong>Derrick Goh:</strong> As you embark on this new chapter, I just wanted to take a moment to express my deepest gratitude for your guidance, support, and leadership. Working with you has been an incredible experience—your wisdom and dedication have always inspired me, and your kindness has made this journey all the more memorable. I wish you nothing but success, happiness, and fulfillment in everything that lies ahead. May you continue to shine and inspire those around you, just as you have done here. You will certainly be missed, but your impact will remain with us. Good luck, and may your path be filled with all the blessings you deserve!</div>
-    <div class="blessing"><strong>Chi Zhe:</strong> I just wanted to say thanks for all your help and support while we’ve worked on projects. I’ve really appreciated your guidance, the laughs, and all the little moments that made work more enjoyable. I’m going to miss having you around, and I hope your next chapter brings you exciting opportunities and great experiences. Wishing you all the best—you really deserve it!</div>
+  <div id="inputSection">
+    <!-- 已隐藏 -->
+    <input type="text" id="resignee" placeholder="Resignee’s Name">
+    <textarea id="message" placeholder="Your Blessing" rows="3"></textarea>
+    <input type="text" id="from" placeholder="From">
+    <br>
+    <button onclick="addMessage()">Add Message</button>
+    <button onclick="generateShareable()">Generate Card</button>
+  </div>
+
+  <div id="messages">
+    <div class="message-item show">
+      <strong>To: Thomas Tan</strong><br>
+      All the best to you Sue Yee! Really appreciate your help and guidance when I first joined. Sad to see you go.... Keep in touch!!<br>
+      <em>From: Thomas Tan</em>
+    </div>
+    <div class="message-item show">
+      <strong>To: Ling Ling</strong><br>
+      Hi Sue Yee, Wish we could have known each other longer but nonetheless, I am happy for you and your new adventure ahead. I am sure your new company and colleagues will benefit from your warm personality and vast knowledge. All the best in whatever the road takes you! Best wishes,<br>
+      <em>From: Ling Ling</em>
+    </div>
+    <div class="message-item show">
+      <strong>To: Edison Lim</strong><br>
+      You’ve been such an awesome teammate — thanks a lot for all your support and guidance. Wishing you lots of success in your new role!<br>
+      <em>From: Edison Lim</em>
+    </div>
+    <div class="message-item show">
+      <strong>To: Stanley Chew</strong><br>
+      Thank you for all your guidance throughout these years ,and for being so kind to us. Its been a pleasure to work alongside you. All the best and take care !<br>
+      <em>From: Stanley Chew</em>
+    </div>
+    <div class="message-item show">
+      <strong>To: Sean Khoo</strong><br>
+      “It’s hard to say goodbye, but I’m really happy for you. Best wishes in your new role, and may this next step bring you both growth and happiness. Let’s stay in touch!”<br>
+      <em>From: Sean Khoo</em>
+    </div>
+    <div class="message-item show">
+      <strong>To: Ai Hui</strong><br>
+      Thanks a lot for all the support these past few years. Learned a ton working with you and really enjoyed being part of the team. Wishing all the best ahead! I’ll definitely miss working with you.<br>
+      <em>From: Ai Hui</em>
+    </div>
+    <div class="message-item show">
+      <strong>To: Derrick Goh</strong><br>
+      As you embark on this new chapter, I just wanted to take a moment to express my deepest gratitude for your guidance, support, and leadership. Working with you has been an incredible experience—your wisdom and dedication have always inspired me, and your kindness has made this journey all the more memorable. I wish you nothing but success, happiness, and fulfillment in everything that lies ahead. May you continue to shine and inspire those around you, just as you have done here. You will certainly be missed, but your impact will remain with us. Good luck, and may your path be filled with all the blessings you deserve!<br>
+      <em>From: Derrick Goh</em>
+    </div>
+    <div class="message-item show">
+      <strong>To: Chi Zhe</strong><br>
+      I just wanted to say thanks for all your help and support while we’ve worked on projects. I’ve really appreciated your guidance, the laughs, and all the little moments that made work more enjoyable. I’m going to miss having you around, and I hope your next chapter brings you exciting opportunities and great experiences. Wishing you all the best—you really deserve it!<br>
+      <em>From: Chi Zhe</em>
+    </div>
   </div>
 </div>
 
 <script>
-// 🔹 烟花动画保持原样
+// 🔹 烟花动画保留原来的代码
 const canvas = document.getElementById('fireworks');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -110,24 +156,27 @@ function createFirework(){
 }
 
 function draw(){
-  ctx.fillStyle='rgba(0,0,0,0.1)';
+  ctx.fillStyle='rgba(10,10,35,0.2)';
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
   for(let i=0;i<fireworks.length;i++){
     let f = fireworks[i];
     if(!f.exploded){
       f.y -= 5;
-      ctx.fillStyle='white';
-      ctx.fillRect(f.x,f.y,2,10);
-      if(f.y<=f.targetY){
-        f.exploded=true;
-        for(let j=0;j<50;j++){
+      ctx.beginPath();
+      ctx.arc(f.x,f.y,3,0,Math.PI*2);
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+      if(f.y <= f.targetY){
+        f.exploded = true;
+        for(let j=0;j<30;j++){
           f.particles.push({
             x:f.x,
             y:f.y,
             vx:rand(-3,3),
             vy:rand(-3,3),
-            alpha:1
+            alpha:1,
+            color:`hsl(${Math.random()*360},100%,50%)`
           });
         }
       }
@@ -137,13 +186,17 @@ function draw(){
         p.x += p.vx;
         p.y += p.vy;
         p.alpha -= 0.02;
-        ctx.fillStyle=`rgba(255,${Math.floor(rand(100,255))},0,${p.alpha})`;
-        ctx.fillRect(p.x,p.y,2,2);
+        ctx.globalAlpha = p.alpha;
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,2,0,Math.PI*2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+        ctx.globalAlpha = 1;
       }
     }
   }
 
-  fireworks = fireworks.filter(f => !f.particles.every(p => p.alpha<=0));
+  fireworks = fireworks.filter(f => !f.exploded || f.particles.some(p=>p.alpha>0));
   requestAnimationFrame(draw);
 }
 
