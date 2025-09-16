@@ -4,35 +4,67 @@
 <meta charset="UTF-8">
 <title>Farewell Card</title>
 <style>
-  body {
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100%;
     font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #ffecd2, #fcb69f);
-    color: #000;
-    text-align: center;
-    padding: 20px;
   }
-  h1 { margin-bottom: 30px; }
-  #blessingsContainer {
-    max-width: 700px;
+
+  body {
+    background: linear-gradient(to right, #ffecd2, #fcb69f);
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0; /* 放到最底层 */
+    pointer-events: none;
+  }
+
+  #content {
+    position: relative;
+    z-index: 1; /* 确保文字在上层 */
+    padding: 40px;
+    max-width: 800px;
     margin: 0 auto;
+    color: #fff;
     text-align: left;
   }
-  .blessing {
-    background: rgba(255,255,255,0.7);
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-    white-space: pre-wrap;
-    color: #000;
+
+  h1 {
+    text-align: center;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+    font-size: 3em;
+    margin-bottom: 30px;
   }
-  .blessing strong { color: #d2691e; }
+
+  .blessing {
+    background: rgba(0,0,0,0.3);
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 12px;
+    border: 2px solid;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(45deg, #ffd700, #ff69b4);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+    white-space: pre-wrap;
+  }
+
+  .blessing strong {
+    color: #ffd700;
+  }
 </style>
 </head>
 <body>
 
-<h1>Farewell Card</h1>
+<canvas id="fireworks"></canvas>
 
-<div id="blessingsContainer">
+<div id="content">
+  <h1>Farewell Card</h1>
+
   <div class="blessing"><strong>Thomas Tan:</strong>
 All the best to you Sue Yee! Really appreciate your help and guidance when I first joined. Sad to see you go.... Keep in touch!!</div>
 
@@ -43,8 +75,79 @@ Wish we could have known each other longer but nonetheless, I am happy for you a
   <div class="blessing"><strong>Edison Lim:</strong>
 You’ve been such an awesome teammate — thanks a lot for all your support and guidance. Wishing you lots of success in your new role!</div>
 
-  <!-- 其他祝福依次加入 -->
+  <div class="blessing"><strong>Stanley Chew:</strong>
+Thank you for all your guidance throughout these years, and for being so kind to us. Its been a pleasure to work alongside you. All the best and take care!</div>
+
+  <div class="blessing"><strong>Sean Khoo:</strong>
+“It’s hard to say goodbye, but I’m really happy for you. Best wishes in your new role, and may this next step bring you both growth and happiness. Let’s stay in touch!”</div>
 </div>
+
+<script>
+const canvas = document.getElementById('fireworks');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let fireworks = [];
+
+function rand(min,max){return Math.random()*(max-min)+min;}
+
+function createFirework(){
+  fireworks.push({
+    x: rand(0,canvas.width),
+    y: canvas.height,
+    targetY: rand(50, canvas.height/2),
+    particles: [],
+    exploded: false
+  });
+}
+
+function draw(){
+  // 半透明覆盖，留下残影
+  ctx.fillStyle='rgba(0,0,0,0.1)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  for(let i=0;i<fireworks.length;i++){
+    let f = fireworks[i];
+    if(!f.exploded){
+      f.y -= 5;
+      ctx.fillStyle='white';
+      ctx.fillRect(f.x,f.y,2,10);
+      if(f.y<=f.targetY){
+        f.exploded=true;
+        for(let j=0;j<50;j++){
+          f.particles.push({
+            x:f.x,
+            y:f.y,
+            vx:rand(-3,3),
+            vy:rand(-3,3),
+            alpha:1
+          });
+        }
+      }
+    } else {
+      for(let j=0;j<f.particles.length;j++){
+        let p=f.particles[j];
+        p.x+=p.vx;
+        p.y+=p.vy;
+        p.alpha-=0.02;
+        ctx.fillStyle=`rgba(255,${Math.floor(rand(100,255))},0,${p.alpha})`;
+        ctx.fillRect(p.x,p.y,2,2);
+      }
+    }
+  }
+  // 删除完全消失的火花
+  fireworks = fireworks.filter(f => !f.particles.every(p => p.alpha<=0));
+}
+
+setInterval(draw,30);
+setInterval(createFirework,800);
+
+window.addEventListener('resize', ()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
 
 </body>
 </html>
