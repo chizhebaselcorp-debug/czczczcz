@@ -258,3 +258,16 @@
   </script>
 </body>
 </html>
+// 自动保存 + 自动恢复
+(function(){
+    const ids = ['resignee','message','from'];
+    window.addEventListener('DOMContentLoaded', ()=>{
+        ids.forEach(id=>{
+            const el = document.getElementById(id);
+            if(el){
+                el.value = localStorage.getItem(id) || '';
+                el.addEventListener('input', ()=> localStorage.setItem(id, el.value));
+            }
+        });
+    });
+})();
