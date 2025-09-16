@@ -5,74 +5,27 @@
 <title>Farewell Card</title>
 <style>
   body {
-    font-family: 'Arial', sans-serif;
+    font-family: Arial, sans-serif;
     background: linear-gradient(to right, #ffecd2, #fcb69f);
-    color: #fff;
+    color: #000;
     text-align: center;
     padding: 20px;
-    overflow-x: hidden;
-    margin: 0;
   }
-
-  h1 {
-    margin-bottom: 30px;
-    font-size: 2.5em;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
-    position: relative;
-    z-index: 1;
-  }
-
+  h1 { margin-bottom: 30px; }
   #blessingsContainer {
     max-width: 700px;
     margin: 0 auto;
     text-align: left;
-    position: relative;
-    z-index: 1;
   }
-
   .blessing {
-    background: rgba(0,0,0,0.3);
-    border-radius: 12px;
-    padding: 15px;
-    margin: 15px 0;
+    background: rgba(255,255,255,0.7);
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
     white-space: pre-wrap;
-    color: #fff;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
-    border: 2px solid;
-    border-image-slice: 1;
-    border-image-source: linear-gradient(45deg, #ffd700, #ff69b4);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInUp 0.8s forwards;
+    color: #000;
   }
-
-  .blessing:nth-child(1) { animation-delay: 0.1s; }
-  .blessing:nth-child(2) { animation-delay: 0.3s; }
-  .blessing:nth-child(3) { animation-delay: 0.5s; }
-  .blessing:nth-child(4) { animation-delay: 0.7s; }
-  .blessing:nth-child(5) { animation-delay: 0.9s; }
-  .blessing:nth-child(6) { animation-delay: 1.1s; }
-  .blessing:nth-child(7) { animation-delay: 1.3s; }
-  .blessing:nth-child(8) { animation-delay: 1.5s; }
-  .blessing:nth-child(9) { animation-delay: 1.7s; }
-
-  .blessing strong {
-    color: #ffd700;
-    font-size: 1.1em;
-  }
-
-  @keyframes fadeInUp {
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 0; /* 放在最下层，文字在上层 */
-  }
+  .blessing strong { color: #d2691e; }
 </style>
 </head>
 <body>
@@ -85,97 +38,13 @@ All the best to you Sue Yee! Really appreciate your help and guidance when I fir
 
   <div class="blessing"><strong>Ling Ling:</strong>
 Hi Sue Yee,  
-Wish we could have known each other longer but nonetheless, I am happy for you and your new adventure ahead. I am sure your new company and colleagues will benefit from your warm personality and vast knowledge. All the best in whatever the road takes you! Best wishes,</div>
+Wish we could have known each other longer but nonetheless, I am happy for you and your new adventure ahead. Best wishes,</div>
 
   <div class="blessing"><strong>Edison Lim:</strong>
 You’ve been such an awesome teammate — thanks a lot for all your support and guidance. Wishing you lots of success in your new role!</div>
 
-  <div class="blessing"><strong>Stanley Chew:</strong>
-Thank you for all your guidance throughout these years, and for being so kind to us. Its been a pleasure to work alongside you. All the best and take care!</div>
-
-  <div class="blessing"><strong>Sean Khoo:</strong>
-“It’s hard to say goodbye, but I’m really happy for you. Best wishes in your new role, and may this next step bring you both growth and happiness. Let’s stay in touch!”</div>
-
-  <div class="blessing"><strong>Ai Hui:</strong>
-Congratulation on your new adventure, we are still in shock that you are leaving us, Wishing all the best in your next chapter. C you in Miri.</div>
-
-  <div class="blessing"><strong>Derrick Goh:</strong>
-Thanks a lot for all the support these past few years. Learned a ton working with you and really enjoyed being part of the team. Wishing you all the best ahead! I’ll definitely miss working with you.</div>
-
-  <div class="blessing"><strong>Thomas Chng Jun Zhi:</strong>
-As you embark on this new chapter, I just wanted to take a moment to express my deepest gratitude for your guidance, support, and leadership. Working with you has been an incredible experience—your wisdom and dedication have always inspired me, and your kindness has made this journey all the more memorable. I wish you nothing but success, happiness, and fulfillment in everything that lies ahead. May you continue to shine and inspire those around you, just as you have done here. You will certainly be missed, but your impact will remain with us. Good luck, and may your path be filled with all the blessings you deserve!</div>
-
-  <div class="blessing"><strong>Chi Zhe:</strong>
-I just wanted to say thanks for all your help and support while we’ve worked on projects. I’ve really appreciated your guidance, the laughs, and all the little moments that made work more enjoyable. I’m going to miss having you around, and I hope your next chapter brings you exciting opportunities and great experiences. Wishing you all the best—you really deserve it!</div>
+  <!-- 其他祝福依次加入 -->
 </div>
-
-<canvas id="fireworks"></canvas>
-
-<script>
-/* 烟花动画 */
-const canvas = document.getElementById('fireworks');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let fireworks = [];
-
-function rand(min,max){return Math.random()*(max-min)+min;}
-
-function createFirework(){
-  fireworks.push({
-    x: rand(0,canvas.width),
-    y: canvas.height,
-    targetY: rand(50, canvas.height/2),
-    particles: [],
-    exploded: false
-  });
-}
-
-function draw(){
-  ctx.fillStyle='rgba(0,0,0,0.1)';
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  
-  for(let i=0;i<fireworks.length;i++){
-    let f = fireworks[i];
-    if(!f.exploded){
-      f.y -= 5;
-      ctx.fillStyle='white';
-      ctx.fillRect(f.x,f.y,2,10);
-      if(f.y<=f.targetY){
-        f.exploded=true;
-        for(let j=0;j<50;j++){
-          f.particles.push({
-            x:f.x,
-            y:f.y,
-            vx:rand(-3,3),
-            vy:rand(-3,3),
-            alpha:1
-          });
-        }
-      }
-    } else {
-      for(let j=0;j<f.particles.length;j++){
-        let p=f.particles[j];
-        p.x+=p.vx;
-        p.y+=p.vy;
-        p.alpha-=0.02;
-        ctx.fillStyle=`rgba(255,${Math.floor(rand(100,255))},0,${p.alpha})`;
-        ctx.fillRect(p.x,p.y,2,2);
-      }
-    }
-  }
-  fireworks = fireworks.filter(f => !f.particles.every(p => p.alpha<=0));
-}
-
-setInterval(draw,30);
-setInterval(createFirework,800);
-
-window.addEventListener('resize', ()=>{
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
-</script>
 
 </body>
 </html>
