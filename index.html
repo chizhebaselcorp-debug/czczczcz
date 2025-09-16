@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>To Sue Yee</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Pacifico', cursive;
+      background: linear-gradient(to top, #0a0a23, #1a1a4d);
+      overflow: hidden;
+    }
+
+    #ecardContainer {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      min-height: 500px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 20px;
+      box-shadow: 0 0 40px rgba(255,255,255,0.3);
+      backdrop-filter: blur(10px);
+      text-align: center;
+      padding: 25px;
+      color: white;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 40px;
+      text-shadow: 0 0 10px #fff, 0 0 20px #f0f, 0 0 30px #0ff;
+    }
+
+    input, textarea {
+      margin: 5px 0;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      width: 80%;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      outline: none;
+    }
+
+    input::placeholder, textarea::placeholder {
+      color: rgba(255,255,255,0.7);
+    }
+
+    button {
+      padding: 12px 25px;
+      margin: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(45deg,#ff6ec7,#00d4ff);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255,255,255,0.3);
+      transition: transform 0.2s;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    #messages {
+      margin-top: 20px;
+      text-align: left;
+      max-height: 350px;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    .message-item {
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      border-radius: 15px;
+      background: linear-gradient(135deg,#ff6ec7,#00d4ff);
+      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+      position: relative;
+      opacity: 0;
+      transform: translateY(50px) scale(0.95);
+      transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .message-item.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="fireworks"></canvas>
+
+  <div id="ecardContainer">
+    <h1>Farewell E-Card</h1>
+    <div id="inputSection">
+      <input type="text" id="resignee" placeholder="Resignee’s Name">
+      <textarea id="message" placeholder="Your Blessing" rows="3"></textarea>
+      <input type="text" id="from" placeholder="From">
+      <br>
+      <button onclick="addMessage()">Add Message</button>
+      <button onclick="generateShareable()">Generate Card</button>
+    </div>
+    <div id="messages"></div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      // ===== 烟花动画 =====
+      const canvas = document.getElementById('fireworks');
+      const ctx = canvas.getContext('2d');
+
+      function resizeCanvas(){
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      let fireworks = [];
+      function random(min,max){ return Math.random()*(max-min)+min; }
+
+      class Firework{
+        constructor(){
+          this.x = random(0, canvas.width);
+          this.y = canvas.height;
+          this.targetY = random(50, canvas.height/2);
+          this.particles = [];
+          this.exploded = false;
+        }
+        update(){
+          if(this.y > this.targetY && !this.exploded){
+            this.y -= 5;
+          } else if(!this.exploded){
+            this.explode();
+          }
+          this.particles.forEach(p => p.update());
+        }
+        explode(){
+          this.exploded = true;
+          for(let i=0;i<30;i++){
+            this.particles.push(new Particle(this.x, this.y));
+          }
+        }
+        draw(){
+          if(!this.exploded){
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, 3, 0, Math.PI*2);
+            ctx.fillStyle = '#fff';
+            ctx.fill();
+          }
+          this.particles.forEach(p => p.draw());
+        }
+      }
+
+      class Particle{
+        constructor(x,y){
+          this.x = x;
+          this.y = y;
+          this.vx = random(-3,3);
+          this.vy = random(-3,3);
+          this.alpha = 1;
+          this.color = `hsl(${Math.random()*360},100%,50%)`;
+        }
+        update(){
+          this.x += this.vx;
+          this.y += this.vy;
+          this.alpha -= 0.02;
+        }
+        draw(){
+          ctx.globalAlpha = this.alpha;
+          ctx.beginPath();
+          ctx.arc(this.x,this.y,2,0,Math.PI*2);
+          ctx.fillStyle = this.color;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+      }
+
+      function animate(){
+        ctx.fillStyle = "rgba(10,10,35,0.2)";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+        if(Math.random()<0.05){
+          fireworks.push(new Firework());
+        }
+        fireworks.forEach((f,i)=>{
+          f.update();
+          f.draw();
+          if(f.exploded && f.particles.every(p=>p.alpha<=0)) fireworks.splice(i,1);
+        });
+        requestAnimationFrame(animate);
+      }
+      animate();
+
+      // ===== 留言功能（带自动保存）=====
+      const messagesContainer = document.getElementById('messages');
+
+      // 从 localStorage 载入
+      function loadMessages() {
+        const saved = JSON.parse(localStorage.getItem("ecardMessages") || "[]");
+        saved.forEach(msg => {
+          const div = document.createElement('div');
+          div.className = 'message-item show';
+          div.innerHTML = `<strong>To: ${msg.to}</strong><br>${msg.text}<br><em>From: ${msg.from}</em>`;
+          messagesContainer.appendChild(div);
+        });
+      }
+
+      // 保存到 localStorage
+      function saveMessages() {
+        const all = [];
+        document.querySelectorAll('#messages .message-item').forEach(div => {
+          const [toLine, textLine, fromLine] = div.innerHTML.split("<br>");
+          all.push({
+            to: toLine.replace(/<[^>]+>/g,"").replace("To: ",""),
+            text: textLine,
+            from: fromLine.replace(/<[^>]+>/g,"").replace("From: ","")
+          });
+        });
+        localStorage.setItem("ecardMessages", JSON.stringify(all));
+      }
+
+      window.addMessage = function(){
+        const name = document.getElementById('resignee').value || "Resignee";
+        const message = document.getElementById('message').value || "Best wishes!";
+        const from = document.getElementById('from').value || "Colleague";
+
+        const div = document.createElement('div');
+        div.className = 'message-item';
+        div.innerHTML = `<strong>To: ${name}</strong><br>${message}<br><em>From: ${from}</em>`;
+        messagesContainer.appendChild(div);
+        setTimeout(()=> div.classList.add('show'), 50);
+
+        // 清空输入
+        document.getElementById('resignee').value = '';
+        document.getElementById('message').value = '';
+        document.getElementById('from').value = '';
+
+        // 保存
+        saveMessages();
+      };
+
+      window.generateShareable = function(){
+        document.getElementById('inputSection').style.display = 'none';
+      };
+
+      // 页面加载时恢复
+      loadMessages();
+    });
+  </script>
+</body>
+</html>
