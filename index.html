@@ -1,273 +1,121 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>To Sue Yee</title>
-
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
-
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-family: 'Pacifico', cursive;
-      background: linear-gradient(to top, #0a0a23, #1a1a4d);
-      overflow: hidden;
-    }
-
-    #ecardContainer {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 700px;
-      min-height: 500px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 20px;
-      box-shadow: 0 0 40px rgba(255,255,255,0.3);
-      backdrop-filter: blur(10px);
-      text-align: center;
-      padding: 25px;
-      color: white;
-    }
-
-    h1 {
-      margin-bottom: 20px;
-      font-size: 40px;
-      text-shadow: 0 0 10px #fff, 0 0 20px #f0f, 0 0 30px #0ff;
-    }
-
-    input, textarea {
-      margin: 5px 0;
-      padding: 12px;
-      border-radius: 12px;
-      border: none;
-      width: 80%;
-      background: rgba(255,255,255,0.2);
-      color: white;
-      outline: none;
-    }
-
-    input::placeholder, textarea::placeholder {
-      color: rgba(255,255,255,0.7);
-    }
-
-    button {
-      padding: 12px 25px;
-      margin: 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 12px;
-      background: linear-gradient(45deg,#ff6ec7,#00d4ff);
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 0 15px rgba(255,255,255,0.3);
-      transition: transform 0.2s;
-    }
-    button:hover {
-      transform: scale(1.05);
-    }
-
-    #messages {
-      margin-top: 20px;
-      text-align: left;
-      max-height: 350px;
-      overflow-y: auto;
-      padding: 10px;
-    }
-
-    .message-item {
-      margin-bottom: 15px;
-      padding: 10px 15px;
-      border-radius: 15px;
-      background: linear-gradient(135deg,#ff6ec7,#00d4ff);
-      box-shadow: 0 0 10px rgba(255,255,255,0.2);
-      position: relative;
-      opacity: 0;
-      transform: translateY(50px) scale(0.95);
-      transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-    }
-
-    .message-item.show {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Farewell Card</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #ffecd2, #fcb69f);
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    overflow-x: hidden;
+  }
+  h1 { margin-bottom: 30px; }
+  #blessingsContainer {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: left;
+  }
+  .blessing {
+    background: rgba(0,0,0,0.2);
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+  }
+  .blessing strong { color: #ffd700; }
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+</style>
 </head>
 <body>
-  <canvas id="fireworks"></canvas>
 
-  <div id="ecardContainer">
-    <h1>Farewell E-Card</h1>
-    <div id="inputSection">
-      <input type="text" id="resignee" placeholder="Resignee’s Name">
-      <textarea id="message" placeholder="Your Blessing" rows="3"></textarea>
-      <input type="text" id="from" placeholder="From">
-      <br>
-      <button onclick="addMessage()">Add Message</button>
-      <button onclick="generateShareable()">Generate Card</button>
-    </div>
-    <div id="messages"></div>
-  </div>
+<h1>Farewell Card</h1>
 
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      // ===== 烟花动画 =====
-      const canvas = document.getElementById('fireworks');
-      const ctx = canvas.getContext('2d');
+<div id="blessingsContainer">
+  <div class="blessing"><strong>Thomas Tan:</strong> All the best to you Sue Yee! Really appreciate your help and guidance when I first joined. Sad to see you go.... Keep in touch!!</div>
+  <div class="blessing"><strong>Ling Ling:</strong> Hi Sue Yee, Wish we could have known each other longer but nonetheless, I am happy for you and your new adventure ahead. I am sure your new company and colleagues will benefit from your warm personality and vast knowledge. All the best in whatever the road takes you! Best wishes,</div>
+  <div class="blessing"><strong>Edison Lim:</strong> You’ve been such an awesome teammate — thanks a lot for all your support and guidance. Wishing you lots of success in your new role!</div>
+  <div class="blessing"><strong>Stanley Chew:</strong> Thank you for all your guidance throughout these years ,and for being so kind to us. Its been a pleasure to work alongside you. All the best and take care !</div>
+  <div class="blessing"><strong>Sean Khoo:</strong> “It’s hard to say goodbye, but I’m really happy for you. Best wishes in your new role, and may this next step bring you both growth and happiness. Let’s stay in touch!”</div>
+  <div class="blessing"><strong>Ai Hui:</strong> Congratulation on your new adventure, we are still in shock that you are leaving us, Wishing all the best in your next chapter. C you in Miri.</div>
+  <div class="blessing"><strong>Derrick Goh:</strong> Thanks a lot for all the support these past few years. Learned a ton working with you and really enjoyed being part of the team. Wishing you all the best ahead! I’ll definitely miss working with you.</div>
+  <div class="blessing"><strong>Thomas Chng Jun Zhi:</strong> As you embark on this new chapter, I just wanted to take a moment to express my deepest gratitude for your guidance, support, and leadership. Working with you has been an incredible experience—your wisdom and dedication have always inspired me, and your kindness has made this journey all the more memorable. I wish you nothing but success, happiness, and fulfillment in everything that lies ahead. May you continue to shine and inspire those around you, just as you have done here. You will certainly be missed, but your impact will remain with us. Good luck, and may your path be filled with all the blessings you deserve!</div>
+  <div class="blessing"><strong>Chi Zhe:</strong> I just wanted to say thanks for all your help and support while we’ve worked on projects. I’ve really appreciated your guidance, the laughs, and all the little moments that made work more enjoyable. I’m going to miss having you around, and I hope your next chapter brings you exciting opportunities and great experiences. Wishing you all the best—you really deserve it!</div>
+</div>
 
-      function resizeCanvas(){
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-      }
-      window.addEventListener('resize', resizeCanvas);
-      resizeCanvas();
+<canvas id="fireworks"></canvas>
 
-      let fireworks = [];
-      function random(min,max){ return Math.random()*(max-min)+min; }
+<script>
+/* 🔹 简单烟花动画 */
+const canvas = document.getElementById('fireworks');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-      class Firework{
-        constructor(){
-          this.x = random(0, canvas.width);
-          this.y = canvas.height;
-          this.targetY = random(50, canvas.height/2);
-          this.particles = [];
-          this.exploded = false;
-        }
-        update(){
-          if(this.y > this.targetY && !this.exploded){
-            this.y -= 5;
-          } else if(!this.exploded){
-            this.explode();
-          }
-          this.particles.forEach(p => p.update());
-        }
-        explode(){
-          this.exploded = true;
-          for(let i=0;i<30;i++){
-            this.particles.push(new Particle(this.x, this.y));
-          }
-        }
-        draw(){
-          if(!this.exploded){
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, 3, 0, Math.PI*2);
-            ctx.fillStyle = '#fff';
-            ctx.fill();
-          }
-          this.particles.forEach(p => p.draw());
-        }
-      }
+let fireworks = [];
 
-      class Particle{
-        constructor(x,y){
-          this.x = x;
-          this.y = y;
-          this.vx = random(-3,3);
-          this.vy = random(-3,3);
-          this.alpha = 1;
-          this.color = `hsl(${Math.random()*360},100%,50%)`;
-        }
-        update(){
-          this.x += this.vx;
-          this.y += this.vy;
-          this.alpha -= 0.02;
-        }
-        draw(){
-          ctx.globalAlpha = this.alpha;
-          ctx.beginPath();
-          ctx.arc(this.x,this.y,2,0,Math.PI*2);
-          ctx.fillStyle = this.color;
-          ctx.fill();
-          ctx.globalAlpha = 1;
-        }
-      }
+function rand(min,max){return Math.random()*(max-min)+min;}
 
-      function animate(){
-        ctx.fillStyle = "rgba(10,10,35,0.2)";
-        ctx.fillRect(0,0,canvas.width,canvas.height);
-        if(Math.random()<0.05){
-          fireworks.push(new Firework());
-        }
-        fireworks.forEach((f,i)=>{
-          f.update();
-          f.draw();
-          if(f.exploded && f.particles.every(p=>p.alpha<=0)) fireworks.splice(i,1);
-        });
-        requestAnimationFrame(animate);
-      }
-      animate();
+function createFirework(){
+  fireworks.push({
+    x: rand(0,canvas.width),
+    y: canvas.height,
+    targetY: rand(50, canvas.height/2),
+    particles: [],
+    exploded: false
+  });
+}
 
-      // ===== 留言功能（带自动保存）=====
-      const messagesContainer = document.getElementById('messages');
-
-      // 从 localStorage 载入
-      function loadMessages() {
-        const saved = JSON.parse(localStorage.getItem("ecardMessages") || "[]");
-        saved.forEach(msg => {
-          const div = document.createElement('div');
-          div.className = 'message-item show';
-          div.innerHTML = `<strong>To: ${msg.to}</strong><br>${msg.text}<br><em>From: ${msg.from}</em>`;
-          messagesContainer.appendChild(div);
-        });
-      }
-
-      // 保存到 localStorage
-      function saveMessages() {
-        const all = [];
-        document.querySelectorAll('#messages .message-item').forEach(div => {
-          const [toLine, textLine, fromLine] = div.innerHTML.split("<br>");
-          all.push({
-            to: toLine.replace(/<[^>]+>/g,"").replace("To: ",""),
-            text: textLine,
-            from: fromLine.replace(/<[^>]+>/g,"").replace("From: ","")
+function draw(){
+  ctx.fillStyle='rgba(0,0,0,0.1)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  
+  for(let i=0;i<fireworks.length;i++){
+    let f = fireworks[i];
+    if(!f.exploded){
+      f.y -= 5;
+      ctx.fillStyle='white';
+      ctx.fillRect(f.x,f.y,2,10);
+      if(f.y<=f.targetY){
+        f.exploded=true;
+        for(let j=0;j<50;j++){
+          f.particles.push({
+            x:f.x,
+            y:f.y,
+            vx:rand(-3,3),
+            vy:rand(-3,3),
+            alpha:1
           });
-        });
-        localStorage.setItem("ecardMessages", JSON.stringify(all));
+        }
       }
+    } else {
+      for(let j=0;j<f.particles.length;j++){
+        let p=f.particles[j];
+        p.x+=p.vx;
+        p.y+=p.vy;
+        p.alpha-=0.02;
+        ctx.fillStyle=`rgba(255,${Math.floor(rand(100,255))},0,${p.alpha})`;
+        ctx.fillRect(p.x,p.y,2,2);
+      }
+    }
+  }
+  fireworks = fireworks.filter(f => !f.particles.every(p => p.alpha<=0));
+}
 
-      window.addMessage = function(){
-        const name = document.getElementById('resignee').value || "Resignee";
-        const message = document.getElementById('message').value || "Best wishes!";
-        const from = document.getElementById('from').value || "Colleague";
+setInterval(draw,30);
+setInterval(createFirework,800);
 
-        const div = document.createElement('div');
-        div.className = 'message-item';
-        div.innerHTML = `<strong>To: ${name}</strong><br>${message}<br><em>From: ${from}</em>`;
-        messagesContainer.appendChild(div);
-        setTimeout(()=> div.classList.add('show'), 50);
+window.addEventListener('resize', ()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
 
-        // 清空输入
-        document.getElementById('resignee').value = '';
-        document.getElementById('message').value = '';
-        document.getElementById('from').value = '';
-
-        // 保存
-        saveMessages();
-      };
-
-      window.generateShareable = function(){
-        document.getElementById('inputSection').style.display = 'none';
-      };
-
-      // 页面加载时恢复
-      loadMessages();
-    });
-  </script>
 </body>
 </html>
-// 自动保存 + 自动恢复
-(function(){
-    const ids = ['resignee','message','from'];
-    window.addEventListener('DOMContentLoaded', ()=>{
-        ids.forEach(id=>{
-            const el = document.getElementById(id);
-            if(el){
-                el.value = localStorage.getItem(id) || '';
-                el.addEventListener('input', ()=> localStorage.setItem(id, el.value));
-            }
-        });
-    });
-})();
